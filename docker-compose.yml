@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: student-task-manager-db
+    environment:
+      POSTGRES_DB: student_task_manager
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD:
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: student-task-manager-app
+    depends_on:
+      - postgres
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/student_task_manager
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
